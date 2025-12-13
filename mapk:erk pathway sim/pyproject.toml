@@ -1,0 +1,13 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "mapk-erk"
+version = "0.1.0"
+description = "MAPK/ERK pathway simulator (ODE + optional stochastic + interactive UI)"
+requires-python = ">=3.10"
+readme = "README.md"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/mapk_erk"]
