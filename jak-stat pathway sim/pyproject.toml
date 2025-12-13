@@ -1,0 +1,16 @@
+[project]
+name = "jak_stat"
+version = "0.1.0"
+description = "jak–stat pathway simulator (ode + logical)"
+requires-python = ">=3.10"
+
+dependencies = [
+  "numpy>=1.26",
+  "scipy>=1.11",
+  "pandas>=2.1",
+  "plotly>=5.18",
+  "streamlit>=1.31",
+]
+
+[tool.ruff]
+line-length = 100
