@@ -1,0 +1,144 @@
+# GPCR → cAMP / PKA representative pathway parameters
+# Units are intentionally "model units" (roughly: concentration in uM, time in s)
+# Tune freely; this is meant to be a complex but editable starting point.
+
+sim:
+  t0: 0.0
+  t_end: 1200.0
+  max_step: 0.5
+
+ssa:
+  # Converts "uM-like" initial conditions to integer counts.
+  # Larger => less noise. Smaller => more single-molecule behavior.
+  scale: 400.0
+
+ligand:
+  # Ligand pulse input L(t)
+  L_baseline: 0.0
+  L_pulse: 0.25
+  t_on: 30.0
+  t_off: 330.0
+
+# ---------- Receptor & desensitization ----------
+receptor:
+  k_on: 6.0          # R + L -> RL
+  k_off: 0.6         # RL -> R + L
+  k_act: 1.0         # RL -> R*
+  k_deact: 0.25      # R* -> R
+
+  k_r_dephos: 0.06   # Rp -> R
+
+  # GRK module
+  k_grk_act: 0.8     # GRK0 + Gbg -> GRK*
+  k_grk_deact: 0.25  # GRK* -> GRK0
+  k_grk_phos: 1.9    # R* + GRK* -> Rp
+
+  # PKA receptor phosphorylation (heterologous desensitization)
+  k_pka_r_phos: 0.18 # R* + PKA* -> Rp
+
+  # Arrestin/internalization
+  k_arr_on: 3.5      # Rp + Arr -> RArr
+  k_arr_off: 0.18    # RArr -> Rp + Arr
+  k_int: 0.17        # RArr -> Rint + Arr
+  k_rec: 0.02        # Rint -> R
+
+  Arr_tot: 1.0
+
+# ---------- G protein cycle (Gs) ----------
+Gs:
+  k_gef: 2.8         # R* + Gs_trimer -> R* + Gs_GTP + Gbg
+  k_gtpase: 0.40     # Gs_GTP -> Gs_aGDP
+  k_reassoc: 3.2     # Gs_aGDP + Gbg -> Gs_trimer
+
+# ---------- Adenylyl cyclase ----------
+AC:
+  k_bind: 3.0        # AC + Gs_GTP -> AC_act
+  k_unbind: 1.0      # AC_act -> AC + Gs_GTP
+
+  k_bind_p: 3.0      # AC_p + Gs_GTP -> AC_p_act
+  k_unbind_p: 1.0
+
+  k_pka_ac: 0.30     # PKA* phosphorylates AC pools
+  k_pp_ac: 0.07      # dephosphorylation
+
+  k_cat: 3.5         # cAMP production by AC_act
+  k_cat_p: 6.0       # cAMP production by AC_p_act
+
+# ---------- cAMP compartments ----------
+cAMP:
+  k_diff: 0.6        # cAMP_mem <-> cAMP_cyt
+
+# ---------- PDEs (membrane + cytosol) ----------
+PDE:
+  Km: 1.6
+  k_cat_mem: 4.5
+  k_cat_mem_p: 8.0
+  k_cat_cyt: 3.0
+  k_cat_cyt_p: 7.5
+
+  k_pka_pde: 0.45    # PDE phosphorylation by PKA*
+  k_pp_pde: 0.11     # PDE dephos
+
+# ---------- PKA module (explicit cAMP binding steps) ----------
+PKA:
+  k_on1: 2.2         # PKA0 + cAMP -> PKA1
+  k_off1: 0.75
+  k_on2: 1.3         # PKA1 + cAMP -> PKA2
+  k_off2: 0.45
+
+  k_release: 1.1     # PKA2 -> PKA*
+  k_inact: 0.28      # PKA* -> PKA0 (effective reassociation)
+
+# ---------- Downstream readout: CREB ----------
+CREB:
+  k_pka: 0.95        # CREB -> pCREB
+  k_pp: 0.22         # pCREB -> CREB
+
+# ---------- Initial conditions (uM-ish) ----------
+init:
+  # receptor states
+  R: 1.0
+  RL: 0.0
+  Rstar: 0.0
+  Rp: 0.0
+  RArr: 0.0
+  Rint: 0.0
+
+  # arrestin pool
+  Arr: 1.0
+
+  # GRK
+  GRK0: 0.6
+  GRKstar: 0.0
+
+  # G protein
+  Gs_trimer: 1.0
+  Gs_GTP: 0.0
+  Gs_aGDP: 0.0
+  Gbg: 0.0
+
+  # AC pools
+  AC: 0.4
+  AC_act: 0.0
+  AC_p: 0.0
+  AC_p_act: 0.0
+
+  # PDE pools
+  PDE_mem: 0.25
+  PDE_mem_p: 0.0
+  PDE_cyt: 0.45
+  PDE_cyt_p: 0.0
+
+  # cAMP
+  cAMP_mem: 0.05
+  cAMP_cyt: 0.05
+
+  # PKA binding ladder
+  PKA0: 0.35
+  PKA1: 0.0
+  PKA2: 0.0
+  PKAstar: 0.0
+
+  # downstream
+  CREB: 1.0
+  pCREB: 0.0
