@@ -1,0 +1,60 @@
+# androgen receptor signaling simulation configuration
+
+simulation:
+  time_end: 10000  # seconds
+  time_step: 0.1   # seconds
+  num_runs: 100    # monte carlo runs
+  
+parameters:
+  # androgen receptor properties
+  ar_total: 1000   # total AR molecules per cell
+  ar_nucleus_fraction: 0.3  # fraction in nucleus
+  
+  # ligand properties
+  testosterone_concentration: 1.0e-9  # M (1 nM)
+  dht_concentration: 1.0e-9           # M (1 nM)
+  
+  # binding kinetics (M^-1 s^-1)
+  k_on_testosterone: 1.0e6
+  k_off_testosterone: 0.1
+  k_on_dht: 1.0e6
+  k_off_dht: 0.01  # DHT binds more strongly
+  
+  # conversion rates
+  k_testosterone_to_dht: 0.01  # 5α-reductase activity
+  
+  # dimerization
+  k_dimerization: 0.1
+  k_dimer_dissociation: 0.01
+  
+  # nuclear translocation
+  k_import: 0.5
+  k_export: 0.1
+  
+  # DNA binding
+  k_dna_on: 0.01
+  k_dna_off: 0.001
+  
+  # transcription
+  k_transcription_basal: 0.001
+  k_transcription_activated: 0.1
+  
+  # degradation
+  k_ar_degradation: 0.0001
+  k_mrna_degradation: 0.001
+
+visualization:
+  style: seaborn-v0_8-darkgrid
+  dpi: 300
+  figure_width: 12
+  figure_height: 8
+  color_scheme:
+    primary: "#2E86AB"
+    secondary: "#A23B72"
+    tertiary: "#F18F01"
+    quaternary: "#C73E1D"
+    
+output:
+  plots_dir: "plots"
+  data_dir: "data/processed"
+  results_dir: "results"
